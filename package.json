@@ -38,6 +38,7 @@
     "typescript": "^4.4.4"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "moduleFileExtensions": [
       "ts",
       "js"

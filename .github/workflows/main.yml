@@ -35,6 +35,14 @@ jobs:
         run: npm run lint
         working-directory: ./
         
+      - name: Test
+        run: npm run test
+        working-directory: ./
+        
+      - name: Build gpx2geojson
+        run: npm run build -fn=src/gpx2geojson/rollup.config.js
+        working-directory: ./
+        
       - name: Build wolfram2cpp
         run: npm run build -fn=src/wolfram2cpp/rollup.config.js
         working-directory: ./
