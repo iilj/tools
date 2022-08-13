@@ -11,6 +11,20 @@ function assert(condition, msg) {
         throw new Error(msg ?? 'assertion failed');
     }
 }
+/** 指定された文字列を，指定されたファイル名で保存する（保存ダイアログ表示） */
+const saveFile = (content, filename) => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const objectURL = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.download = filename;
+    a.href = objectURL;
+    a.click();
+    a.remove();
+    window.setTimeout(() => {
+        URL.revokeObjectURL(objectURL);
+    }, 1e4);
+};
 
 /** await 可能な FileReader */
 class FileReaderEx extends FileReader {
@@ -51,10 +65,10 @@ class Gpx {
         const reader = new FileReaderEx();
         const inputGpxString = await reader.readAsText(this.gpxFile);
         assert(typeof inputGpxString === 'string');
-        this.initByString(inputGpxString);
+        this.initFromString(inputGpxString);
     }
     /** gpx 文字列で初期化する */
-    initByString(inputGpxString) {
+    initFromString(inputGpxString) {
         const parser = new DOMParser();
         let dom;
         try {
@@ -199,35 +213,21 @@ class Gpx {
         const xmlString = serializer.serializeToString(xmlDoc);
         return xmlString;
     }
-    /** 指定された文字列を，指定されたファイル名で保存する（保存ダイアログ表示） */
-    saveFile(content, filename) {
-        const blob = new Blob([content], { type: 'text/plain' });
-        const objectURL = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        document.body.appendChild(a);
-        a.download = filename;
-        a.href = objectURL;
-        a.click();
-        a.remove();
-        window.setTimeout(() => {
-            URL.revokeObjectURL(objectURL);
-        }, 1e4);
-    }
     /** kml ファイルに保存する */
     saveKmlFile(interval, lineColor, lineWeight) {
         if (this.gpxFile === undefined)
             return;
         const xmlString = this.getKmlString(interval, lineColor, lineWeight);
         const filename = this.gpxFile.name.split('.')[0] + '.kml';
-        this.saveFile(xmlString, filename);
+        saveFile(xmlString, filename);
     }
     /** GeoJSON ファイルに保存する */
     saveGeoJsonFile(interval, lineColor, lineWeight) {
         if (this.gpxFile === undefined)
             return;
-        const xgeoJsonString = this.getGeoJsonString(interval, lineColor, lineWeight);
+        const geoJsonString = this.getGeoJsonString(interval, lineColor, lineWeight);
         const filename = this.gpxFile.name.split('.')[0] + '.geojson';
-        this.saveFile(xgeoJsonString, filename);
+        saveFile(geoJsonString, filename);
     }
 }
 
