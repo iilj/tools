@@ -19,6 +19,10 @@ $ npm run build -fn=src/gpx2geojson/rollup.config.js
 ```
 
 ```sh
+$ npm run build -fn=src/busroute2geojson/rollup.config.js
+```
+
+```sh
 $ npm run build -fn=src/wolfram2cpp/rollup.config.js
 ```
 

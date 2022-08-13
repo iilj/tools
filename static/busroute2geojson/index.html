@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>gpx2geojson / gpx2kml</title>
+    <title>busroute2geojson</title>
     <link rel="icon" href="../favicon.ico" />
     <!-- Twitter card template -->
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@iiljj" />
-    <meta name="twitter:title" content="gpx2geojson / gpx2kml" />
+    <meta name="twitter:title" content="busroute2geojson" />
     <meta
       name="twitter:description"
-      content="GPX を GeoJSON または KML に変換します．"
+      content="「バスルート」のバス路線経路を GeoJSON に変換します．"
     />
     <meta
       name="twitter:image"
@@ -52,38 +52,27 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="../">iilj-tools</a></li>
           <li class="breadcrumb-item active" aria-current="page">
-            gpx2geojson / gpx2kml
+            busroute2geojson
           </li>
         </ol>
       </nav>
 
-      <h1>gpx2geojson / gpx2kml</h1>
+      <h1>busroute2geojson</h1>
       <h2>説明</h2>
       <div>
-        <p>
-          GPX を GeoJSON または KML に変換します．JavaScript
-          単体で記述されています．
-        </p>
-        <p>座標を適当に間引く設定が欲しかったため，変換機を自作しました．</p>
-        <p>
-          出力の座標数が「座標数上限」を上回らないように座標を間引きます(*)．この値を
-          5000 未満程度に設定すると，地理院地図に読み込んだ際に軽快に動きます．
-        </p>
-        <p>
-          (*) 正確には，座標数上限に従って決まる「座標採用間隔」の値が N
-          になるとき，座標が N 個に 1 個の割合で等間隔に採用されます．
-        </p>
+        <p>「バスルート」のバス路線経路を GeoJSON に変換します．</p>
       </div>
 
       <h2>Form</h2>
       <div>
         <div class="input-group mb-3">
-          <span class="input-group-text">*.gpx</span>
+          <span class="input-group-text">URL</span>
           <input
             class="form-control"
-            type="file"
-            id="js-gpx2geojson-input-file"
-            accept=".gpx"
+            type="text"
+            id="js-busroute2geojson-input-url"
+            value=""
+            placeholder="https://bus-routes.net/?lid=1908"
           />
         </div>
 
@@ -92,7 +81,7 @@
           <input
             type="color"
             class="form-control form-control-color"
-            id="js-gpx2geojson-input-line-color"
+            id="js-busroute2geojson-input-line-color"
             value="#ff0000"
             title="Choose your color"
           />
@@ -103,76 +92,40 @@
           <input
             class="form-control"
             type="number"
-            id="js-gpx2geojson-input-line-weight"
+            id="js-busroute2geojson-input-line-weight"
             value="5"
           />
         </div>
 
-        <div class="input-group mb-3">
-          <span class="input-group-text">座標数上限</span>
+        <div class="mb-3">
           <input
-            class="form-control"
-            type="number"
-            id="js-gpx2geojson-input-coordinates-max-length"
-            value="2000"
-            min="1"
-            step="1"
+            class="form-check-input"
+            type="checkbox"
+            id="js-busroute2geojson-add-busstop-points"
           />
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-          <span class="input-group-text">座標採用間隔</span>
-          <input
-            class="form-control"
-            type="number"
-            id="js-gpx2geojson-input-interval"
-            value="1"
-            disabled
-            readonly
-          />
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-          <span class="input-group-text">座標数（間引き前）</span>
-          <input
-            class="form-control"
-            type="number"
-            id="js-gpx2geojson-input-coordinates-length"
-            value="0"
-            disabled
-            readonly
-          />
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-          <span class="input-group-text">座標数（間引き後）</span>
-          <input
-            class="form-control"
-            type="number"
-            id="js-gpx2geojson-input-coordinates-length-save"
-            value="0"
-            disabled
-            readonly
-          />
+          <label
+            class="form-check-label"
+            for="js-busroute2geojson-add-busstop-points"
+            >停留所の座標情報を追加する</label
+          >
         </div>
 
         <div class="mb-3">
           <button
             type="button"
             class="btn btn-primary"
-            id="js-gpx2geojson-save-as-geojson"
-            disabled
+            id="js-busroute2geojson-save-as-geojson"
           >
             Save as GeoJSON
           </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            id="js-gpx2geojson-save-as-kml"
-            disabled
+          <div
+            class="spinner-border"
+            role="status"
+            style="display: none"
+            id="js-busroute2geojson-spinner"
           >
-            Save as KML
-          </button>
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ describe('serialize', (): void => {
         </gpx>
         `;
         const gpx: Gpx = new Gpx();
-        gpx.initByString(inputGpxString);
+        gpx.initFromString(inputGpxString);
 
         const interval = 1;
         const lineColor = '#ff0000';
@@ -59,7 +59,7 @@ describe('serialize', (): void => {
         </gpx>
         `;
         const gpx: Gpx = new Gpx();
-        gpx.initByString(inputGpxString);
+        gpx.initFromString(inputGpxString);
 
         const interval = 1;
         const lineColor = '#ff0000';
