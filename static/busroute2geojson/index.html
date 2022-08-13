@@ -61,6 +61,12 @@
       <h2>説明</h2>
       <div>
         <p>「バスルート」のバス路線経路を GeoJSON に変換します．</p>
+        <p>
+          <a href="https://bus-routes.net/bus.php"
+            >全国のバス事業者リスト - バスルート</a
+          >
+          から辿れる，路線ごとのページの URL を入力してください．
+        </p>
       </div>
 
       <h2>Form</h2>
@@ -73,6 +79,8 @@
             id="js-busroute2geojson-input-url"
             value=""
             placeholder="https://bus-routes.net/?lid=1908"
+            required
+            pattern="^https:\/\/bus-routes\.net\/\?.*lid=\d+.*"
           />
         </div>
 

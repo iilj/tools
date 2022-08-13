@@ -38,6 +38,10 @@ void (() => {
                 const lineWeight = lineWeightInputElement.valueAsNumber;
                 const addBusStopPoints = addBusStopPointsCheckbox.checked;
 
+                if (!urlInputElement.value.startsWith('https://bus-routes.net/?')) {
+                    throw Error('URL が不正です．https://bus-routes.net/?... の形の URL を指定してください．');
+                }
+
                 const url = new URL(urlInputElement.value);
                 const params = new URLSearchParams(url.search);
                 // lid を抽出
